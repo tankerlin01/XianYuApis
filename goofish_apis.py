@@ -68,6 +68,7 @@ def _gen_tfstk(timeout: int = 15) -> str:
 def build_initial_cookies() -> dict:
     """纯 HTTP 获取闲鱼初始 cookie（不含登录态）"""
     s = requests.Session()
+    s.trust_env = False
     s.headers.update({'User-Agent': UA})
 
     s.get('https://log.mmstat.com/eg.js', timeout=10)
@@ -288,6 +289,7 @@ class XianyuApis:
         self.item_detail_url = 'https://h5api.m.goofish.com/h5/mtop.taobao.idle.pc.detail/1.0/'
         self.reset_login_info_url = 'https://passport.goofish.com/newlogin/hasLogin.do'
         self.session = requests.Session()
+        self.session.trust_env = False
         self.session.cookies.update(cookies)
         self.device_id = device_id
         self.cookies = {}

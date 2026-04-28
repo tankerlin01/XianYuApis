@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}会话工作台{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>会话工作台</h2>
+    <p>查看买家消息、处理人工接管、发送手动回复。</p>
+  </div>
+  <div class="status-chip">{{ channel_status.state }} / {{ account.account_name or '未登录' }}</div>
+</div>
+
+<div class="workspace">
+  <section class="card conversation-list">
+    <h3>会话列表</h3>
+    {% if conversations %}
+      <div class="conversation-items">
+        {% for item in conversations %}
+          <a class="conversation-item {% if selected and item.conversation_id == selected.conversation_id %}active{% endif %}" href="{{ url_for('conversations', conversation_id=item.conversation_id) }}">
+            <div class="line strong">
+              <span>{{ item.buyer_name }}</span>
+              <span class="badge">{{ item.status }}</span>
+            </div>
+            <div class="line">{{ item.last_message_preview or '-' }}</div>
+            <div class="line muted">
+              <span>{{ item.last_message_at or '-' }}</span>
+              <span>未读 {{ item.unread_count }}</span>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty">还没有会话数据。</p>
+    {% endif %}
+  </section>
+
+  <section class="card chat-panel">
+    {% if selected %}
+      <div class="chat-header">
+        <div>
+          <h3>{{ selected.buyer_name }}</h3>
+          <p>会话 ID：{{ selected.conversation_id }}</p>
+        </div>
+        <form class="inline-form" method="post" action="{{ url_for('update_conversation_mode', conversation_id=selected.conversation_id) }}">
+          <input type="hidden" name="manual_takeover" value="{{ 0 if selected.manual_takeover else 1 }}">
+          <button class="btn" type="submit">
+            {% if selected.manual_takeover %}切回自动回复{% else %}切换人工接管{% endif %}
+          </button>
+        </form>
+      </div>
+
+      <div class="messages">
+        {% for message in messages %}
+          <div class="message {{ message.sender_type }}">
+            <div class="message-meta">
+              <strong>{{ message.sender_name or message.sender_type }}</strong>
+              <span>{{ message.created_at }}</span>
+              {% if message.reply_source %}<span class="badge">{{ message.reply_source }}</span>{% endif %}
+            </div>
+            <div class="message-body">{{ message.content }}</div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <form method="post" action="{{ url_for('manual_reply', conversation_id=selected.conversation_id) }}">
+        <label for="content">人工回复</label>
+        <textarea id="content" name="content" rows="4" placeholder="输入要发送给买家的内容"></textarea>
+        <button class="btn primary" type="submit">发送人工回复</button>
+      </form>
+    {% else %}
+      <p class="empty">请选择一个会话。</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
+

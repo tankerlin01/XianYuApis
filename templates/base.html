@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}闲鱼客服工作台{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>闲鱼客服</h1>
+        <p>MVP 工作台</p>
+      </div>
+      <nav class="nav">
+        <a href="{{ url_for('connect') }}">接入状态</a>
+        <a href="{{ url_for('conversations') }}">会话工作台</a>
+        <a href="{{ url_for('rules') }}">规则与 FAQ</a>
+        <a href="{{ url_for('settings') }}">系统设置</a>
+        <a href="{{ url_for('logs') }}">回复日志</a>
+      </nav>
+    </aside>
+    <main class="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-list">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>
+

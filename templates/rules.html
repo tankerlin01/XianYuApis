@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}规则与 FAQ{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>规则与 FAQ</h2>
+    <p>维护自动回复规则和常见问题知识。</p>
+  </div>
+</div>
+
+<div class="grid two">
+  <section class="card">
+    <h3>新增规则</h3>
+    <form method="post" action="{{ url_for('save_rule') }}" class="stack">
+      <input name="rule_name" placeholder="规则名称">
+      <select name="rule_type">
+        <option value="keyword">关键词规则</option>
+        <option value="sensitive">敏感词规则</option>
+      </select>
+      <input name="keywords" placeholder="关键词，逗号分隔">
+      <textarea name="reply_text" rows="4" placeholder="回复内容"></textarea>
+      <input name="priority" type="number" value="100" placeholder="优先级">
+      <label><input type="checkbox" name="enabled" checked> 启用</label>
+      <button class="btn primary" type="submit">保存规则</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h3>新增 FAQ</h3>
+    <form method="post" action="{{ url_for('save_faq') }}" class="stack">
+      <input name="title" placeholder="标题">
+      <input name="match_keywords" placeholder="命中关键词，逗号分隔">
+      <textarea name="content" rows="5" placeholder="标准答案"></textarea>
+      <input name="tags" placeholder="标签">
+      <label><input type="checkbox" name="enabled" checked> 启用</label>
+      <button class="btn primary" type="submit">保存 FAQ</button>
+    </form>
+  </section>
+</div>
+
+<div class="grid two">
+  <section class="card">
+    <h3>规则列表</h3>
+    <table>
+      <thead><tr><th>名称</th><th>类型</th><th>关键词</th><th>优先级</th><th>操作</th></tr></thead>
+      <tbody>
+        {% for rule in rules %}
+          <tr>
+            <td>{{ rule.rule_name }}</td>
+            <td>{{ rule.rule_type }}</td>
+            <td>{{ rule.keywords|from_json_list|join('，') }}</td>
+            <td>{{ rule.priority }}</td>
+            <td>
+              <form method="post" action="{{ url_for('delete_rule', rule_id=rule.id) }}">
+                <button class="btn danger" type="submit">删除</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h3>FAQ 列表</h3>
+    <table>
+      <thead><tr><th>标题</th><th>关键词</th><th>操作</th></tr></thead>
+      <tbody>
+        {% for faq in faqs %}
+          <tr>
+            <td>{{ faq.title }}</td>
+            <td>{{ faq.match_keywords }}</td>
+            <td>
+              <form method="post" action="{{ url_for('delete_faq', faq_id=faq.id) }}">
+                <button class="btn danger" type="submit">删除</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+{% endblock %}
+
