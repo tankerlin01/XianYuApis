@@ -166,11 +166,12 @@ async def handle_message(self, message, websocket):
 
 
 ## 🍔 交流群
-如果你对爬虫和ai agent感兴趣，请加作者主页wx通过邀请加入群聊
+如果你对爬虫和 AI Agent 感兴趣，请加作者主页 wx 通过邀请加入群聊
 
-ps: 请加群9、10，人满或者过期 issue | wx 提醒
+ps: 请加群11、12，人满或者过期 issue | wx 提醒
 
-![group7](https://github.com/cv-cat/Spider_XHS/blob/master/author/group9.jpg)
+![group11](https://github.com/user-attachments/assets/7fdded35-52ca-4bcb-a5b7-935928ed417c)
 
-![group7](https://github.com/cv-cat/Spider_XHS/blob/master/author/group10.jpg)
+![group12](https://github.com/user-attachments/assets/8dd858be-5843-4074-a2d5-fc48b3d61856)
+
 
